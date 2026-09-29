@@ -3,109 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta Calificaciones 5FV1</title>
+    <title>Consulta Calificaciones</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
-    <style>
-        /* Estilos básicos para que funcione el diseño */
-        body { font-family: 'Roboto', sans-serif; padding: 20px; }
-        .form { max-width: 400px; margin: auto; }
-        .grupo { margin-bottom: 20px; }
-        .warnings { color: red; font-size: 14px; }
-        input { width: 100%; padding: 8px; margin-top: 5px; }
-        button { padding: 10px 20px; cursor: pointer; background: #2196F3; color: white; border: none; }
-    </style>
+    <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-    <form id="form">
-        <div class="form">
-            <h1>Calificaciones Finales de Fisio Humana 5FV1</h1>
-            <div class="grupo">
-                <label for="name">Escribe tu matrícula</label>
-                <input type="text" id="name" placeholder="Ej. 2024500264">
+    <div id="main-container" style="width: 100%; max-width: 800px; padding: 20px;">
+        <form id="form">
+            <div class="form">
+                <h1>Consulta de Calificaciones</h1>
+                <div class="grupo">
+                    <input type="text" id="name" required><span class="barra"></span>
+                    <label for="name">Matrícula</label>
+                </div>
+                <div class="grupo">
+                    <input type="password" id="password" required><span class="barra"></span>
+                    <label for="password">Contraseña (Misma que matrícula)</label>
+                </div>
+                
+                <button type="submit">Consultar Resultado</button>
+                <p class="warnings" id="warnings"></p>
             </div>
-            
-            <button type="submit">Consultar Resultado</button>
-            <p class="warnings" id="warnings"></p>
+        </form>
+
+        <div id="resultado-container" style="display: none; background: #fff; padding: 40px; box-shadow: 0 0 6px 0 rgba(255, 255, 255, 0.8); border-radius: 10px;">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #4568DC;">Resultados</h2>
+            <div style="overflow-x: auto;">
+                <table id="tabla-resultados">
+                    <!-- Contenido de la tabla generado por JS -->
+                </table>
+            </div>
+            <p style="text-align: center; font-style: italic; color: #555; margin-top: 20px; font-weight: 500;">
+                El promedio de seminarios equivale al 15% de la calificación final, el promedio de reportes equivale al 15% de la calificación fiinal y el promedio de examenes al 70% de la calificación final.
+            </p>
+            <button id="btn-volver" style="width: 200px; margin-top: 20px;">Volver a consultar</button>
         </div>
-    </form>
+    </div>
 
-<script>
-    const matriculaInput = document.getElementById("name");
-    const form = document.getElementById("form");
-    const parrafo = document.getElementById("warnings");
-
-    // Datos de alumnos
-    const _5fv1_alumnos = [
-        { "Matricula": 2024500264, "Nombre": "ALONSO CARDOSO MARIA FERNANDA", "Parcial1": 5.46, "Parcial2": 6.62, "Parcial3": 8.73, "SAES": 7 },
-        { "Matricula": 2024500441, "Nombre": "ARAGON CAMPOS CYNTHIA LIZET", "Parcial1": 6.48, "Parcial2": 8.43, "Parcial3": 8.72, "SAES": 8 },
-        { "Matricula": 2024500022, "Nombre": "ARTEAGA RAMIREZ LEONARDO", "Parcial1": 7.1, "Parcial2": 7.9, "Parcial3": 8.96, "SAES": 8 },
-        { "Matricula": 2023500421, "Nombre": "CHAVEZ TORRES DAFNE MONTSERRAT", "Parcial1": 8.45, "Parcial2": 8.95, "Parcial3": 8.8, "SAES": 9 },
-        { "Matricula": 2022500169, "Nombre": "CUEVAS SANCHEZ DANIELA ITZEL", "Parcial1": 7.88, "Parcial2": 9.77, "Parcial3": 8.52, "SAES": 9 },
-        { "Matricula": 2021501077, "Nombre": "GASPAR RAMIREZ ITZEL", "Parcial1": 3.79, "Parcial2": 3.53, "Parcial3": 7.61, "SAES": 5 },
-        { "Matricula": 2023500050, "Nombre": "HERNANDEZ REYES ARCANGEL MIGUEL", "Parcial1": 8.3, "Parcial2": 8.01, "Parcial3": 8.2, "SAES": 8 },
-        { "Matricula": 2023500065, "Nombre": "HERNANDEZ TREVIÑO ROCIO ALEJANDRA", "Parcial1": 5.1, "Parcial2": 6.01, "Parcial3": 7.53, "SAES": 6 },
-        { "Matricula": 2024500042, "Nombre": "LARA HERNANDEZ FERNANDA", "Parcial1": 8.6, "Parcial2": 8.76, "Parcial3": 9.05, "SAES": 9 },
-        { "Matricula": 2023501054, "Nombre": "LEON MARTINEZ GAHEL EDUARDO", "Parcial1": 9.3, "Parcial2": 9.08, "Parcial3": 9.39, "SAES": 9 },
-        { "Matricula": 2024500175, "Nombre": "LOPEZ HERNANDEZ URIEL ADRIAN", "Parcial1": 7.59, "Parcial2": 7.21, "Parcial3": 8.28, "SAES": 8 },
-        { "Matricula": 2024500204, "Nombre": "LOPEZ OLIVA RICARDO", "Parcial1": 8.88, "Parcial2": 8.71, "Parcial3": 9.45, "SAES": 9 },
-        { "Matricula": 2023500431, "Nombre": "MENA SANCHEZ SAUL", "Parcial1": 7.03, "Parcial2": 7.5, "Parcial3": 8.21, "SAES": 8 },
-        { "Matricula": 2022500776, "Nombre": "PEREZ MONTESINOS ULISES", "Parcial1": 5.6, "Parcial2": 1.7, "Parcial3": null, "SAES": "np" },
-        { "Matricula": 2023500940, "Nombre": "PEREZ SANDOVAL JANA VANESA", "Parcial1": 7.88, "Parcial2": 7.37, "Parcial3": 8.49, "SAES": 8 },
-        { "Matricula": 2024500240, "Nombre": "PICHARDO LOPEZ ALEXA", "Parcial1": 6.61, "Parcial2": 6.85, "Parcial3": 9.12, "SAES": 8 },
-        { "Matricula": 2023500389, "Nombre": "PULIDO APODACA CESAR GUSTAVO", "Parcial1": 8.88, "Parcial2": 7.15, "Parcial3": 8.8, "SAES": 8 },
-        { "Matricula": 2024500301, "Nombre": "RAMIREZ SERRANO VALENTINA JOCELYN", "Parcial1": 5.1, "Parcial2": 7.1, "Parcial3": 8.31, "SAES": 7 },
-        { "Matricula": 2023500952, "Nombre": "RAMOS RAMIREZ ADRIANA", "Parcial1": 8.88, "Parcial2": 8.01, "Parcial3": 7.32, "SAES": 8 },
-        { "Matricula": 2023500362, "Nombre": "REYES ROSAS AURA NAOMI", "Parcial1": 7.03, "Parcial2": 8.34, "Parcial3": 7.21, "SAES": 8 },
-        { "Matricula": 2024500330, "Nombre": "RIVERO SOTO MIRIAM SARAHI", "Parcial1": 6.89, "Parcial2": 5.26, "Parcial3": 7.73, "SAES": 7 },
-        { "Matricula": 2023500839, "Nombre": "ROSAS MODESTO KARLA", "Parcial1": 7.86, "Parcial2": 7.45, "Parcial3": 8.7, "SAES": 8 },
-        { "Matricula": 2023500668, "Nombre": "ROSAS MORAN PAOLA", "Parcial1": 4.2, "Parcial2": 7.21, "Parcial3": 8.49, "SAES": 7 },
-        { "Matricula": 2024500393, "Nombre": "RUIZ ARREDONDO DIEGO ARMANDO", "Parcial1": 5.91, "Parcial2": 8.17, "Parcial3": 8.94, "SAES": 8 },
-        { "Matricula": 2023500912, "Nombre": "SOTO RODRIGUEZ ATZIN CITLALLI", "Parcial1": 6.3, "Parcial2": 8.86, "Parcial3": 9.09, "SAES": 8 },
-        { "Matricula": 2023500013, "Nombre": "VALLES MARTINEZ ROBERTO CARLOS", "Parcial1": 8.7, "Parcial2": 7.9, "Parcial3": 9.1, "SAES": 9 },
-        { "Matricula": 2024500166, "Nombre": "YAÑEZ MARTINEZ ANDREA DENISSE", "Parcial1": 7.6, "Parcial2": 7.93, "Parcial3": 9.26, "SAES": 8 },
-        { "Matricula": 2023500384, "Nombre": "YLLESCAS CASTRO JATZIRI", "Parcial1": 6.21, "Parcial2": 8.78, "Parcial3": 9.28, "SAES": 8 }
-    ];
-
-    // Extensión del prototipo Array (Corregido para ser más robusto)
-    Array.prototype.findBy = function (column, value) {
-        for (let i = 0; i < this.length; i++) {
-            let object = this[i];
-            // Convertimos ambos a Number para asegurar la comparación
-            if (column in object && Number(object[column]) === Number(value)) {
-                return object;
-            }
-        }
-        return null; // Si no encuentra nada
-    };
-
-    form.addEventListener("submit", e => {
-        e.preventDefault();
-        let val = matriculaInput.value;
-        parrafo.innerHTML = "";
-
-        if (val.length < 4) {
-            parrafo.innerHTML = "La matrícula no es válida (mínimo 4 caracteres)";
-        } else {
-            procesar('Matricula', val);
-        }
-    });
-
-    function procesar(columna, valor) {
-        const resultado = _5fv1_alumnos.findBy(columna, valor);
-
-        if (resultado) {
-            parrafo.innerHTML = "Consulta exitosa.";
-            alert(`Alumno: ${resultado.Nombre}\n` +
-                  `------------------------------\n` +
-                  `Parcial 1: ${resultado.Parcial1}\n` +
-                  `Parcial 2: ${resultado.Parcial2}\n` +
-                  `Parcial 3: ${resultado.Parcial3 || 'N/A'}\n` +
-                  `Calificación SAES: ${resultado.SAES}`);
-        } else {
-            parrafo.innerHTML = "Matrícula no encontrada.";
-            alert("Error: La matrícula no existe en la base de datos.");
-        }
-    }
-</script>
+    <script src="app.js"></script>
 </body>
 </html>

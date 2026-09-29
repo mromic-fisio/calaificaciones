@@ -1,82 +1,382 @@
-const nombre = document.getElementById("name")
+const form = document.getElementById("form");
+const matriculaInput = document.getElementById("name");
+const passwordInput = document.getElementById("password");
+const parrafo = document.getElementById("warnings");
+const resultadoContainer = document.getElementById("resultado-container");
+const tablaResultados = document.getElementById("tabla-resultados");
+const btnVolver = document.getElementById("btn-volver");
 
+// Datos de alumnos consolidados (simulando JSON del Excel)
+const alumnosData = [
+  {
+    "Matricula": 2024500791,
+    "Alumno": "ALDANA TREJO YARELI ATZIN",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.5,
+    "Promedio Examenes Unidad I": 5.078947368421053,
+    "Promedio Examenes Unidad II  y IV ": 9.1,
+    "Balance Energético Examen": 8.214,
+    "Balance  Hidroosmótico Examen": 8.387096774193548,
+    "Promedio de Examenes": 7.695011035653651,
+    "Calificación Final": 7.686507724957555,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500486,
+    "Alumno": "ALVARADO HERNANDEZ AXEL",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 7.166666666666667,
+    "Promedio Examenes Unidad I": 2.731578947368421,
+    "Promedio Examenes Unidad II  y IV ": 7.7,
+    "Balance Energético Examen": 9.643,
+    "Balance  Hidroosmótico Examen": 9.67741935483871,
+    "Promedio de Examenes": 7.437999575551784,
+    "Calificación Final": 7.3315997028862485,
+    "Calificación SAES": 7
+  },
+  {
+    "Matricula": 2024500071,
+    "Alumno": " ALVAREZ MENDOZA RICARDO",
+    "Promedio reportes": 8.333333333333334,
+    "Promedio Seminarios": 8.666666666666666,
+    "Promedio Examenes Unidad I": 9.68421052631579,
+    "Promedio Examenes Unidad II  y IV ": 9.2,
+    "Balance Energético Examen": 9.286,
+    "Balance  Hidroosmótico Examen": 9.35483870967742,
+    "Promedio de Examenes": 9.381262308998302,
+    "Calificación Final": 9.11688361629881,
+    "Calificación SAES": 9
+  },
+  {
+    "Matricula": 2024500717,
+    "Alumno": " BAUTISTA SANCHEZ KAREN JAQUELINE",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.833333333333333,
+    "Promedio Examenes Unidad I": 6.636842105263158,
+    "Promedio Examenes Unidad II  y IV ": 9.1,
+    "Balance Energético Examen": 6.786,
+    "Balance  Hidroosmótico Examen": 7.096774193548387,
+    "Promedio de Examenes": 7.404904074702887,
+    "Calificación Final": 7.53343285229202,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2023500059,
+    "Alumno": " CASTRO LOPEZ CRISTIAN",
+    "Promedio reportes": 7.333333333333333,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 2.731578947368421,
+    "Promedio Examenes Unidad II  y IV ": 8.8,
+    "Balance Energético Examen": 6.429,
+    "Balance  Hidroosmótico Examen": 6.774193548387097,
+    "Promedio de Examenes": 6.1836931239388795,
+    "Calificación Final": 6.578585186757215,
+    "Calificación SAES": 7
+  },
+  {
+    "Matricula": 2024500571,
+    "Alumno": " DIEGUES FLORES SEBASTIAN",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 7.333333333333333,
+    "Promedio Examenes Unidad I": 1.6115789473684208,
+    "Promedio Examenes Unidad II  y IV ": 10,
+    "Balance Energético Examen": 9.643,
+    "Balance  Hidroosmótico Examen": 9.67741935483871,
+    "Promedio de Examenes": 7.7329995755517835,
+    "Calificación Final": 7.563099702886248,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500706,
+    "Alumno": "GASPAR ORTEGA JESUS ALEJANDRO",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 3.6789473684210523,
+    "Promedio Examenes Unidad II  y IV ": 9.2,
+    "Balance Energético Examen": 8.929,
+    "Balance  Hidroosmótico Examen": 9.03225806451613,
+    "Promedio de Examenes": 7.7100513582342955,
+    "Calificación Final": 7.722035950764006,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2023500638,
+    "Alumno": " GUERRA VELASCO DIANA PAULINA",
+    "Promedio reportes": 7.666666666666667,
+    "Promedio Seminarios": 8,
+    "Promedio Examenes Unidad I": 6.495263157894737,
+    "Promedio Examenes Unidad II  y IV ": 8.7,
+    "Balance Energético Examen": 9.643,
+    "Balance  Hidroosmótico Examen": 9.67741935483871,
+    "Promedio de Examenes": 8.628920628183362,
+    "Calificación Final": 8.390244439728352,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500762,
+    "Alumno": " MARQUEZ MUÑOZ YAGO LEONARDO",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 4.694736842105263,
+    "Promedio Examenes Unidad II  y IV ": 9,
+    "Balance Energético Examen": 10,
+    "Balance  Hidroosmótico Examen": 10,
+    "Promedio de Examenes": 8.423684210526316,
+    "Calificación Final": 8.221578947368421,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500322,
+    "Alumno": "MORALES MIGUEL ANA MARIA",
+    "Promedio reportes": 6.666666666666667,
+    "Promedio Seminarios": 7.333333333333333,
+    "Promedio Examenes Unidad I": 6.794736842105262,
+    "Promedio Examenes Unidad II  y IV ": 9.2,
+    "Balance Energético Examen": 9.643,
+    "Balance  Hidroosmótico Examen": 9.67741935483871,
+    "Promedio de Examenes": 8.828789049235994,
+    "Calificación Final": 8.280152334465194,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500688,
+    "Alumno": " ORTEGA FIERROS SABRINA",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 6.584736842105262,
+    "Promedio Examenes Unidad II  y IV ": 9.7,
+    "Balance Energético Examen": 10,
+    "Balance  Hidroosmótico Examen": 10,
+    "Promedio de Examenes": 9.071184210526315,
+    "Calificación Final": 8.549828947368422,
+    "Calificación SAES": 9
+  },
+  {
+    "Matricula": 2020500441,
+    "Alumno": " ORTIZ NOLASCO ZAIRA LIZETH",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 7.878947368421052,
+    "Promedio Examenes Unidad II  y IV ": 9,
+    "Balance Energético Examen": 10,
+    "Balance  Hidroosmótico Examen": 10,
+    "Promedio de Examenes": 9.219736842105263,
+    "Calificación Final": 8.653815789473683,
+    "Calificación SAES": 9
+  },
+  {
+    "Matricula": 2024500514,
+    "Alumno": " RESILLAS CASILLAS OSMANI FERNANDO",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 6.833333333333333,
+    "Promedio Examenes Unidad I": 2.0852631578947367,
+    "Promedio Examenes Unidad II  y IV ": 8.3,
+    "Balance Energético Examen": 8.929,
+    "Balance  Hidroosmótico Examen": 9.35483870967742,
+    "Promedio de Examenes": 7.167275466893039,
+    "Calificación Final": 7.0920928268251275,
+    "Calificación SAES": 7
+  },
+  {
+    "Matricula": 2022501208,
+    "Alumno": "RICO CESAR MONICA PAOLA",
+    "Promedio reportes": 7.666666666666667,
+    "Promedio Seminarios": 7.833333333333333,
+    "Promedio Examenes Unidad I": 5.305263157894736,
+    "Promedio Examenes Unidad II  y IV ": 9.8,
+    "Balance Energético Examen": 9.286,
+    "Balance  Hidroosmótico Examen": 9.03225806451613,
+    "Promedio de Examenes": 8.355880305602716,
+    "Calificación Final": 8.1741162139219,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500358,
+    "Alumno": "ROJAS GONZALEZ KAREN SARAI",
+    "Promedio reportes": 7.333333333333333,
+    "Promedio Seminarios": 7.166666666666667,
+    "Promedio Examenes Unidad I": 4.782631578947369,
+    "Promedio Examenes Unidad II  y IV ": 9.7,
+    "Balance Energético Examen": 10,
+    "Balance  Hidroosmótico Examen": 10,
+    "Promedio de Examenes": 8.620657894736842,
+    "Calificación Final": 8.20946052631579,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500845,
+    "Alumno": " ROMERO HERNANDEZ ALINE XIMENA",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 7.5,
+    "Promedio Examenes Unidad I": 8.526842105263157,
+    "Promedio Examenes Unidad II  y IV ": 9.8,
+    "Balance Energético Examen": 10,
+    "Balance  Hidroosmótico Examen": 8.709677419354838,
+    "Promedio de Examenes": 9.259129881154498,
+    "Calificación Final": 8.65639091680815,
+    "Calificación SAES": 9
+  },
+  {
+    "Matricula": 2024500559,
+    "Alumno": " ROMERO ORTEGA DIANA LUCIA",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 3.2052631578947364,
+    "Promedio Examenes Unidad II  y IV ": 9,
+    "Balance Energético Examen": 8.571,
+    "Balance  Hidroosmótico Examen": 7.419354838709677,
+    "Promedio de Examenes": 7.048904499151103,
+    "Calificación Final": 7.259233149405771,
+    "Calificación SAES": 7
+  },
+  {
+    "Matricula": 2023500858,
+    "Alumno": " ROMERO PEREZ RICARDO",
+    "Promedio reportes": 8.333333333333334,
+    "Promedio Seminarios": 9,
+    "Promedio Examenes Unidad I": 4.447368421052632,
+    "Promedio Examenes Unidad II  y IV ": 9.1,
+    "Balance Energético Examen": 7.143000000000001,
+    "Balance  Hidroosmótico Examen": 9.03225806451613,
+    "Promedio de Examenes": 7.43065662139219,
+    "Calificación Final": 7.801459634974532,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500846,
+    "Alumno": " SANCHEZ GARCIA ABRAHAM ALDAIR",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.333333333333333,
+    "Promedio Examenes Unidad I": 2.189473684210526,
+    "Promedio Examenes Unidad II  y IV ": 8.3,
+    "Balance Energético Examen": 7.856999999999999,
+    "Balance  Hidroosmótico Examen": 8.064516129032258,
+    "Promedio de Examenes": 6.6027474533106965,
+    "Calificación Final": 6.896923217317487,
+    "Calificación SAES": 7
+  },
+  {
+    "Matricula": 2023500435,
+    "Alumno": "SEGURA FLORES KAREN VALENTINA",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.5,
+    "Promedio Examenes Unidad I": 6.478947368421052,
+    "Promedio Examenes Unidad II  y IV ": 8.8,
+    "Balance Energético Examen": 8.929,
+    "Balance  Hidroosmótico Examen": 9.67741935483871,
+    "Promedio de Examenes": 8.471341680814941,
+    "Calificación Final": 8.229939176570458,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2022650639,
+    "Alumno": "VARELA MORA CASANDRA AURORA",
+    "Promedio reportes": 7,
+    "Promedio Seminarios": 7.666666666666667,
+    "Promedio Examenes Unidad I": 2.889473684210526,
+    "Promedio Examenes Unidad II  y IV ": 9.8,
+    "Balance Energético Examen": 9.643,
+    "Balance  Hidroosmótico Examen": 7.741935483870968,
+    "Promedio de Examenes": 7.518602292020374,
+    "Calificación Final": 7.463021604414261,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2023500133,
+    "Alumno": "VIDAL ZARATE ARANZA MARIEL",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.5,
+    "Promedio Examenes Unidad I": 6.952631578947368,
+    "Promedio Examenes Unidad II  y IV ": 8.9,
+    "Balance Energético Examen": 7.5,
+    "Balance  Hidroosmótico Examen": 9.67741935483871,
+    "Promedio de Examenes": 8.25751273344652,
+    "Calificación Final": 8.080258913412564,
+    "Calificación SAES": 8
+  },
+  {
+    "Matricula": 2024500135,
+    "Alumno": "VILLANUEVA TINAJERO ESTIVALYZ ODETTE",
+    "Promedio reportes": 7.833333333333333,
+    "Promedio Seminarios": 7.5,
+    "Promedio Examenes Unidad I": 7.031578947368421,
+    "Promedio Examenes Unidad II  y IV ": 9.4,
+    "Balance Energético Examen": 9.643,
+    "Balance  Hidroosmótico Examen": 10,
+    "Promedio de Examenes": 9.018644736842106,
+    "Calificación Final": 8.613051315789473,
+    "Calificación SAES": 9
+  },
+  {
+    "Matricula": 2024500167,
+    "Alumno": "VILLASEÑOR ARVIZU ISRAEL MISAEL",
+    "Promedio reportes": 8,
+    "Promedio Seminarios": 8.666666666666666,
+    "Promedio Examenes Unidad I": 8.334736842105263,
+    "Promedio Examenes Unidad II  y IV ": 10,
+    "Balance Energético Examen": 10,
+    "Balance  Hidroosmótico Examen": 7,
+    "Promedio de Examenes": 8.833684210526316,
+    "Calificación Final": 8.68357894736842,
+    "Calificación SAES": 9
+  }
+];
 
-const form = document.getElementById("form")
-const parrafo = document.getElementById("warnings")
-var resultado;
-form.addEventListener("submit", e=>{
-    e.preventDefault()
-    let warnings = ""
-    let entrar = false
-   
-    parrafo.innerHTML = ""
-    if(nombre.value.length <4){
-        warnings += `El nombre no es valido <br>`
-        entrar = true
-    }
-    
-    
-    if(entrar){
-        parrafo.innerHTML = warnings
-    }else{
-        procesar('matricula', nombre.value);
-        parrafo.innerHTML = 'ok';
-    }
-})
-
-  var _5fv2_alumnos= [{"id":"1","matricula":"2021500271","nombre":"BAZAN BLANCO ANDREA","ex1":"7","ex2":"5.3","ex3":"5.3"},{"id":"2","matricula":"2020500001","nombre":"BENUMEA HERNANDEZ VALENTINA","ex1":"6.45","ex2":"4.2","ex3":"7.3"},{"id":"3","matricula":"2021500294","nombre":"BRUNO ROJAS ANGEL GABRIEL","ex1":"4.82","ex2":"4.2","ex3":"7.4"},{"id":"4","matricula":"2020500900","nombre":"CABRERA ESCOBAR MARIA FERNANDA","ex1":"4.82","ex2":"5.8","ex3":"7.8"},{"id":"5","matricula":"2020500137","nombre":"CASTAÑEDA GUTIERREZ ABI JOCABET","ex1":"5.82","ex2":"4.7","ex3":"6.3"},{"id":"6","matricula":"2021500360","nombre":"CORTES MARTINEZ JOSELIN ISELA","ex1":"5.55","ex2":"4.7","ex3":"7.4"},{"id":"7","matricula":"2020500864","nombre":"ESPINOSA RAMIREZ MELISSA","ex1":"7.59","ex2":"6.8","ex3":"9.9"},{"id":"8","matricula":"2021500511","nombre":"GARCIA RASCON LESLY IRAN","ex1":"3.55","ex2":"3.7","ex3":"4.7"},{"id":"9","matricula":"2021500558","nombre":"HERNANDEZ MATAMOROS ALONDRA KAMIL","ex1":"4.82","ex2":"5.3","ex3":"5.3"},{"id":"10","matricula":"2021500637","nombre":"MAYA GARCIA CARLOS ALFREDO","ex1":"np","ex2":"np","ex3":"np"},{"id":"11","matricula":"2020500366","nombre":"MELENDEZ MORALES ISIS INES","ex1":"4.82","ex2":"4.7","ex3":"6.8"},{"id":"12","matricula":"2021500664","nombre":"MORALES LOPEZ AYARI","ex1":"6.45","ex2":"5.3","ex3":"7.9"},{"id":"13","matricula":"2021500740","nombre":"NORIA VELARDE IVONNE","ex1":"4","ex2":"5.3","ex3":"4.7"},{"id":"14","matricula":"2021500752","nombre":"ORTIZ URBANO LUIS EDUARDO","ex1":"4.55","ex2":"4.2","ex3":"5.8"},{"id":"15","matricula":"2021500016","nombre":"PAREDES MENDOZA ANGEL GABRIEL","ex1":"4.55","ex2":"7.9","ex3":"7.3"},{"id":"16","matricula":"2019500493","nombre":"PUENTES AMADOR MIGUEL ANGEL","ex1":"4.55","ex2":"3.7","ex3":"3.7"},{"id":"17","matricula":"2021500869","nombre":"RAMOS CARDOSO OSCAR ANDRES","ex1":"5.18","ex2":"5.3","ex3":"9.4"},{"id":"18","matricula":"2020500538","nombre":"REYES CERVANTES DANIELA","ex1":"4.18","ex2":"3.2","ex3":"5.3"},{"id":"19","matricula":"2021500900","nombre":"REYNA COAHUTLE LEILANI AZEZU","ex1":"5.18","ex2":"6.3","ex3":"6.3"},{"id":"20","matricula":"2020500565","nombre":"RIVERA NAJERA BRAULIO ALBERTO","ex1":"5.82","ex2":"5.3","ex3":"5.8"},{"id":"21","matricula":"2020500519","nombre":"RUBIO BAUTISTA ESTEFANIA","ex1":"7.45","ex2":"6.8","ex3":"9.4"},{"id":"22","matricula":"2021500928","nombre":"SANCHEZ CARBAJAL ARZU YAEL","ex1":"5.82","ex2":"6.3","ex3":"3.7"},{"id":"23","matricula":"2021500896","nombre":"SANCHEZ HERNANDEZ ARANZA DONAHI","ex1":"4.82","ex2":"5.8","ex3":"5.3"},{"id":"24","matricula":"2021500902","nombre":"SANTANA REYNA DANIEL","ex1":"5.82","ex2":"5.3","ex3":"6.3"},{"id":"25","matricula":"2021500981","nombre":"VARGAS SALAZAR HAROLD","ex1":"3.55","ex2":"np","ex3":"6.3"},{"id":"26","matricula":"2021500960","nombre":"VERA REYES FERNANDO PATRICIO","ex1":"np","ex2":"4.7","ex3":"7.9"},{"id":"27","matricula":"2021500961","nombre":"ZARCO SOSA STACI","ex1":"np","ex2":"4.7","ex3":"4.7"},{"id":""}];
-   
-    const _5fm1_alumnos =[
-    {"id":"0","nombre":"ANGELES SANCHEZ ANDREA","calificacion":"6","usuario":"2013500008","password":"2013500008"},
-    {"id":"1","nombre":"CASTRO LOPEZ ESTEFANIA","calificacion":"6.5","usuario":"2019500839","password":"2019500839"},
-    {"id":"2","nombre":"ESPINOZA VARGAS JOSE","calificacion":"5.5","usuario":"2019500270","password":"2019500270"},
-    {"id":"3","nombre":"GARCIA TORREBLANCA HECTOR","calificacion":"0","usuario":"2019500921","password":"2019500921"},
-    {"id":"4","nombre":"GOMEZ LUNA JOSE","calificacion":"6.5","usuario":"2019500843","password":"2019500843"},
-    {"id":"5","nombre":"GONZALEZ CHAVEZ MARIANA","calificacion":"5.5","usuario":"2019500974","password":"2019500974"
-    },{"id":"6","nombre":"GONZALEZ FERRA JESUSn","calificacion":"6.5","usuario":"2020500229","password":"2020500229"},
-    {"id":"7","nombre":"GONZALEZ GUERRERO PAULINA","calificacion":"8.5","usuario":"2020500201","password":"2020500201"},
-    {"id":"8","nombre":"GRANADOS RIVAS BRENDA","calificacion":"6.5","usuario":"2014100690","password":"2014100690"},
-    {"id":"9","nombre":"GUZMAN MARTINEZ GUADALUPE","calificacion":"6","usuario":"2020500256","password":"2020500256"},
-    {"id":"10","nombre":"HERNANDEZ GARCIA ODRY","calificacion":"6","usuario":"2020500341","password":"2020500341"},
-    {"id":"11","nombre":"HERNANDEZ MARTINEZ EDGAR","calificacion":"6.5","usuario":"2020500347","password":"2020500347"},
-    {"id":"12","nombre":"HERNANDEZ RODRIGUEZ NELLY","calificacion":"6","usuario":"2020500286","password":"2020500286"},
-    {"id":"13","nombre":"HERRERA PERALTA IVETTE\r\n","calificacion":"0","usuario":"2020500718","password":"2020500718"},
-    {"id":"14","nombre":"JUAN CHAVEZ MONSERRAT\r\n","calificacion":"8","usuario":"2020500305","password":"2020500305"},
-    {"id":"15","nombre":"LEON COLIN ANGEL","calificacion":"6","usuario":"2015100784","password":"2015100784"},
-    {"id":"16","nombre":"LOPEZ FLORES PAMELA\r\n","calificacion":"6","usuario":"2020500310","password":"2020500310"},
-    {"id":"17","nombre":"LOPEZ JUAREZ LIZBETH\r\n","calificacion":"6","usuario":"2015110692","password":"2015110692"},
-    {"id":"18","nombre":"MARTINEZ AGUSTIN PAULINA\r\n","calificacion":"6","usuario":"2019500688","password":"2019500688"},
-    {"id":"19","nombre":"MEDINA MARTINEZ AUGUSTO\r\n","calificacion":"5.5","usuario":"2020500396","password":"2020500396"},
-    {"id":"20","nombre":"MONTES DE OCA","calificacion":"6.5","usuario":"2020500374","password":"2020500374"},
-    {"id":"21","nombre":"PEREZ HERNANDEZ ANDREA\r\n","calificacion":"6.5","usuario":"2020500484","password":"2020500484"},
-    {"id":"22","nombre":"PEREZ SOLIS DIEGO","calificacion":"5.5","usuario":"2020500486","password":"2020500486"},
-    {"id":"23","nombre":"PUEBLITA TEQUITLALPA DAVID","calificacion":"6","usuario":"2019500955","password":"2019500955"},
-    {"id":"24","nombre":"RAMOS LOPEZ FATIMA","calificacion":"5","usuario":"2020500536","password":"2020500536"},
-    {"id":"25","nombre":"RAZO GARCIA JAIR","calificacion":"5.5","usuario":"2020500584","password":"2020500584"},
-    {"id":"26","nombre":"REYES RAMIREZ BEATRIZ\r\n","calificacion":"8.5","usuario":"2019500602","password":"2019500602"},
-    {"id":"27","nombre":"SALAS GUTIERREZ ANA","calificacion":"6.5","usuario":"2019500590","password":"2019500590"},
-    {"id":"28","nombre":"SALCEDO DE LA CRUZ TAMARA","calificacion":"5","usuario":"2019500906","password":"2019500906"},
-    {"id":"29","nombre":"SALINAS ALEJANDRE MARIA","calificacion":"6.5","usuario":"2019500929","password":"2019500929"},
-    {"id":"30","nombre":"SUAREZ CASTILLO JOSE","calificacion":"5.5","usuario":"2020500512","password":"2020500512"},
-    {"id":"31","nombre":"VILLANUEVA SANCHEZ PEDRO ISAAC","calificacion":"6.5","usuario":"2019500855","password":"2019500855"}];
-    
 Array.prototype.findBy = function (column, value) {
-for (var i=0; i<this.length; i++) {
-    var object = this[i];
-    if (column in object && object[column] === value) {
-        return object;
+    for (let i = 0; i < this.length; i++) {
+        let object = this[i];
+        if (column in object && String(object[column]) === String(value)) {
+            return object;
+        }
     }
-}
+    return null;
+};
 
-}
+form.addEventListener("submit", e => {
+    e.preventDefault();
+    let val = matriculaInput.value.trim();
+    let pass = passwordInput.value.trim();
+    parrafo.innerHTML = "";
 
+    if (val.length < 4) {
+        parrafo.innerHTML = "La matrícula no es válida (mínimo 4 caracteres)";
+    } else if (val !== pass) {
+        parrafo.innerHTML = "Error: La matrícula y contraseña no coinciden.";
+    } else {
+        procesar('Matricula', val);
+    }
+});
 
-  
-function procesar(matricula, valor){
-  console.log(matricula, valor);
- resultado =  _5fv2_alumnos.findBy('matricula', valor);
- promedio =(parseFloat(resultado.ex1)+parseFloat(resultado.ex2)+parseFloat(resultado.ex3))/3;
- promedio =promedio.toPrecision(2)
- alert(` ${resultado.nombre}: \n ex1 =  ${resultado.ex1} \n ex2 = ${resultado.ex2}\n ex3 = ${resultado.ex3}\n promedio = ${promedio}`);
-  
+btnVolver.addEventListener("click", () => {
+    resultadoContainer.style.display = "none";
+    form.style.display = "block";
+    matriculaInput.value = "";
+    passwordInput.value = "";
+    parrafo.innerHTML = "";
+});
+
+function procesar(columna, valor) {
+    const resultado = alumnosData.findBy(columna, valor);
+
+    if (resultado) {
+        // Generar tabla dinámica
+        let thead = "<thead><tr>";
+        let tbody = "<tbody><tr>";
+        
+        for (let key in resultado) {
+            thead += `<th>${key}</th>`;
+            tbody += `<td>${resultado[key] !== null ? resultado[key] : 'N/A'}</td>`;
+        }
+        
+        thead += "</tr></thead>";
+        tbody += "</tr></tbody>";
+        
+        tablaResultados.innerHTML = thead + tbody;
+        
+        // Mostrar resultados
+        form.style.display = "none";
+        resultadoContainer.style.display = "block";
+    } else {
+        parrafo.innerHTML = "Matrícula no encontrada en la base de datos.";
+    }
 }
